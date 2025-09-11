@@ -4,7 +4,7 @@
   "description": "",
   "main": "prueba.js",
   "scripts": {
-    "test": "node prueba.js"
+    "test": "node server.js"
   },
   "keywords": [],
   "author": "",
