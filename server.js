@@ -1,21 +1,14 @@
-// Inicio del servidor del Node JS
-const http = require('http')
+// Creando el servidor con express
+const express = require('express')
+const app = express()
+const port = 3000
 
-const hostname = "127.0.0.1"
-const port = "5000"
-
-const server = http.createServer((req, res) => {
-  // Establece el código de estado (200 OK)
-  res.statusCode = 200
-  
-  // Establece el tipo de contenido usando setHeader()
-  res.setHeader('Content-Type', 'text/plain')
-
-  // Envía la respuesta al cliente
-  res.end("Sexito")
+//Envia un GET que dice 'Hola Mundo'
+app.get('/', (req, res) => {
+  res.send('Hola Mundo')
 })
 
-// El servidor inicia a travez del puerto y el hostname
-server.listen(port, hostname, () => {
-  console.log(`El servidor se está ejecutando en http://${hostname}:${port}/`);
-});
+// Se ejecuta el servidor
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
