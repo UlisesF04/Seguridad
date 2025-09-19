@@ -3,6 +3,9 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+const morgan = require('morgan')
+app.use(morgan('dev'))
+
 //Envia un GET que dice 'Hola Mundo'
 app.get('/', (req, res) => {
   res.send('Hola Mundo')
