@@ -6,10 +6,10 @@ const port = 3000
 const morgan = require('morgan')
 app.use(morgan('dev'))
 
-//Envia un GET que dice 'Hola Mundo'
-app.get('/', (req, res) => {
-  res.send('Hola Mundo')
-})
+app.set('port', process.env.port || 3000)
+
+// Importamos las routes creadas del archivo indes.js
+app.use(require('./routes/index'))
 
 // Se ejecuta el servidor
 app.listen(port, () => {
