@@ -1,51 +1,64 @@
 # Seguridad
-Seguridad - Trabajo Práctico: Implementación de CI/CD Seguro con GitHub Actions y
-Gestión de Claves Privadas
 
-#Objetivo:
-Crear un pipeline CI/CD utilizando GitHub Actions, implementando prácticas seguras de gestión
-de claves privadas, incluyendo el acceso a una API externa.
-Requisitos previos:
-Conocimientos básicos de Git y GitHub
-Familiaridad con JavaScript/Node.js
-Cuenta en GitHub.com
+# 🌤️ Weather API Segura con Node.js
+
+Este proyecto implementa una API REST segura para obtener el clima usando OpenWeatherMap, con buenas prácticas de seguridad y CI/CD.
+
+# pasos a seguir
+
+Paso 2: Configurar Secretos en GitHub
+Ve a tu repositorio → Settings → Secrets and variables → Actions
+
+WEATHER_API_KEY -> Tu clave de OpenWeatherMap
+HEROKU_API_KEY -> Clave de Heroku
+HEROKU_APP_NAME -> Nombre de tu app en Heroku
+
+Implementación de Despliegue Seguro (Heroku)
+heroku create tu-nombre-app
+Paso 2: Configura las variables de entorno en Heroku
+heroku config:set WEATHER_API_KEY=tu_clave_aqui
+
+Paso 3: Rotación Automática de Claves (Simulada)
+script  simple que “rota” la clave:
+
+--
+#!/bin/bash
+echo "Rotando clave de API..."
+
+# Genera una clave ficticia (simulación)
+NEW_KEY="SIMULATED_$(date +%s)"
+echo "Nueva clave generada: $NEW_KEY"
+
+# Actualiza el archivo .env (solo para desarrollo local)
+sed -i "s/^WEATHER_API_KEY=.*/WEATHER_API_KEY=$NEW_KEY/" .env
+
+echo "✅ Clave rotada. Recuerda actualizar el secreto en GitHub y Heroku."
+--
 
 
-#Herramientas de Gestión de Claves Privadas:
-HashiCorp Vault: Sistema de gestión de secretos empresarial.
-AWS Key Management Service (KMS): Servicio de gestión de claves en la nube.
-Azure Key Vault: Servicio de gestión de secretos de Microsoft Azure.
-GitGuardian: Herramienta de escaneo y protección de secretos en el código.
-Doppler: Plataforma de gestión de secretos para equipos de desarrollo.
-Para este ejercicio, utilizaremos los Secrets de GitHub integrados, pero mencionaremos cómo se
-podría integrar una herramienta más avanzada como HashiCorp Vault.
+hacerlo ejecutable chmod +x rotate-key.sh
+
+Para testear con: npm test
+Rotacion de claves con: ./rotate-key.sh
+Despliegue en Heroku: 
+heroku create tu-app-name
+heroku config:set WEATHER_API_KEY=tu_clave
+git push heroku main
 
 
-Tareas:
-1. Configuración del Proyecto:
-Crear un nuevo repositorio en GitHub para una aplicación Node.js simple (será desarrollada
-en clases).
-Inicializar con un package.json y una estructura básica de archivos.
-Crear un directorio .github/workflows.
+## 🛠️ Requisitos
 
-2. Implementación de la Aplicación Básica:
-Desarrollar una aplicación Node.js que haga llamadas a una API externa (por ejemplo, una
-API de clima).
-Implementar pruebas unitarias básicas.
+- Node.js >= 18
+- NPM
+- Cuenta en [OpenWeatherMap](https://openweathermap.org/api)
+- Cuenta en [Heroku](https://heroku.com) (opcional)
 
-3.Configuración del Pipeline CI/CD Básico:
-Crear un archivo ci-cd.yml en .github/workflows.
-Configurar jobs para build y test.
+## 🚀 Instalación
 
-4. Gestión Segura de Claves de API:
-Registrarse en una API que requiera una clave (por ejemplo, OpenWeatherMap).
-Configurar la clave API como un Secret en GitHub.
-Modificar la aplicación y el workflow para usar el secret de forma segura.
+```bash
+git clone <tu-repositorio>
+cd weather-api-secure
+npm install
+cp .env.example .env
+npm start
 
-5.Implementación de Despliegue Seguro:
-Configurar el despliegue a Heroku o similar.
-Implementar rotación automática de claves (simulado con un script).
-
-6. Documentación y Mejores Prácticas:
- Documentar el proceso de gestión de secretos en el README.
- Implementar y documentar mejores prácticas de seguridad.
