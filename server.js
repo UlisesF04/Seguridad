@@ -6,6 +6,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 
+app.use(express.json());
+
 app.get('/weather', async (req, res) => {
     // Validar si la clave de la API está presente
     if (!WEATHER_API_KEY) {
