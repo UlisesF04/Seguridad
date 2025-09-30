@@ -9,12 +9,11 @@ const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 app.use(express.json());
 
 app.get('/weather', async (req, res) => {
-    // Validar si la clave de la API está presente
+    
     if (!WEATHER_API_KEY) {
         return res.status(500).json({ error: 'La clave de la API del clima no está configurada en el servidor.' });
     }
 
-    // Limpiar y validar la entrada del usuario.
     const city = req.query.city ? req.query.city.trim() : '';
 
     if (!city) {
@@ -22,13 +21,13 @@ app.get('/weather', async (req, res) => {
     }
 
     try {
-        // Petición a la API de OpenWeatherMap
+        
         const response = await axios.get('http://api.openweathermap.org/data/2.5/weather', {
             params: {
                 q: city,
                 appid: WEATHER_API_KEY,
-                units: 'metric', // Para obtener la temperatura en Celsius
-                lang: 'es' // Para obtener la descripción en español
+                units: 'metric', 
+                lang: 'es' 
             }
         });
 
@@ -42,7 +41,7 @@ app.get('/weather', async (req, res) => {
         });
 
     } catch (error) {
-        // Manejo de errores específicos de OpenWeatherMap
+        
         if (error.response && error.response.status === 404) {
             return res.status(404).json({ error: 'Ciudad no encontrada. Por favor, verifica el nombre.' });
         }
