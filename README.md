@@ -1,64 +1,31 @@
-# Seguridad
+# CI/CD Seguro con GitHub Actions y Render
 
-# 🌤️ Weather API Segura con Node.js
+## 🛡️ Gestión de Secretos
 
-Este proyecto implementa una API REST segura para obtener el clima usando OpenWeatherMap, con buenas prácticas de seguridad y CI/CD.
+- La clave de OpenWeatherMap **nunca está en el código**.
+- En desarrollo: se carga desde `.env` (ignorado por Git).
+- En CI (GitHub Actions): se inyecta solo durante los tests mediante `secrets.WEATHER_API_KEY`.
+- En producción (Render): se configura directamente en la UI de Render, **fuera de GitHub**.
 
-# pasos a seguir
+## 🚀 Despliegue
 
-Paso 2: Configurar Secretos en GitHub
-Ve a tu repositorio → Settings → Secrets and variables → Actions
+- Usamos **Render** en lugar de Heroku por su plan gratuito actual.
+- El despliegue es **automático al hacer `git push`**, sin necesidad de GitHub Actions.
+- Esto reduce la necesidad de almacenar `HEROKU_API_KEY` en GitHub, mejorando la seguridad.
 
-WEATHER_API_KEY -> Tu clave de OpenWeatherMap
-HEROKU_API_KEY -> Clave de Heroku
-HEROKU_APP_NAME -> Nombre de tu app en Heroku
+## 🔁 Rotación de Claves
 
-Implementación de Despliegue Seguro (Heroku)
-heroku create tu-nombre-app
-Paso 2: Configura las variables de entorno en Heroku
-heroku config:set WEATHER_API_KEY=tu_clave_aqui
+- Se incluye un script de **simulación** (`npm run rotate-keys`).
+- En producción real, se usaría **HashiCorp Vault** o **AWS Secrets Manager** para:
+  - Generar nuevas claves
+  - Actualizarlas en la API y en el entorno de producción
+  - Auditar el acceso
 
-Paso 3: Rotación Automática de Claves (Simulada)
-script  simple que “rota” la clave:
+## ✅ Mejores Prácticas Implementadas
 
---
-#!/bin/bash
-echo "Rotando clave de API..."
-
-# Genera una clave ficticia (simulación)
-NEW_KEY="SIMULATED_$(date +%s)"
-echo "Nueva clave generada: $NEW_KEY"
-
-# Actualiza el archivo .env (solo para desarrollo local)
-sed -i "s/^WEATHER_API_KEY=.*/WEATHER_API_KEY=$NEW_KEY/" .env
-
-echo "✅ Clave rotada. Recuerda actualizar el secreto en GitHub y Heroku."
---
-
-
-hacerlo ejecutable chmod +x rotate-key.sh
-
-Para testear con: npm test
-Rotacion de claves con: ./rotate-key.sh
-Despliegue en Heroku: 
-heroku create tu-app-name
-heroku config:set WEATHER_API_KEY=tu_clave
-git push heroku main
-
-
-## 🛠️ Requisitos
-
-- Node.js >= 18
-- NPM
-- Cuenta en [OpenWeatherMap](https://openweathermap.org/api)
-- Cuenta en [Heroku](https://heroku.com) (opcional)
-
-## 🚀 Instalación
-
-```bash
-git clone <tu-repositorio>
-cd weather-api-secure
-npm install
-cp .env.example .env
-npm start
-
+- ✅ Nunca hardcodear secretos
+- ✅ Usar variables de entorno
+- ✅ Limitar el alcance de los secretos (solo en tests)
+- ✅ Evitar secretos en logs
+- ✅ Separar CI (GitHub Actions) de CD (Render)
+- ✅ Simular rotación como ejercicio de seguridad

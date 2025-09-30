@@ -18,7 +18,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-      - name: Set environment variables
+
+      
+      - name: Set environment variables for tests
         run: |
           echo "WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}" >> .env
 
@@ -29,32 +31,4 @@ jobs:
         run: npm test
 
       - name: Build (if needed)
-        run: echo "Build successful"
-
-  # Despliegue opcional (lo activaremos después)
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18.x'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
-        run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
-          git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git
-          git push heroku main
+        run: echo "✅ Build successful"
